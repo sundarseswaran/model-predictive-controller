@@ -34,28 +34,34 @@ The model predicts the next `N` steps in the target trajectory based on the curr
 
 ![steps and step-interval](./images/steps-and-step-interval.png)
 
+The below values for no. of steps and step duration seems to work very well for the model. 
 
-### Results and Discussion
+```
+size_t N = 10;
+double dt = 0.1;
+```
 
+A 3rd order polynomial is fit over the projected waypoints, this path will be optimized for `cte & epsi` using the below cost function. 
 
+![cost-function](./images/cost-function.png)
 
-##### Hyperparameters
+To ensure smooth transition of actuators values the gap between the actuator values for consecutive points are heavily penalized during cost function optimization to avoid drastic swerve motion in the vehicle. For both the actuators upper and lower bound values are set to practical limits. In case of steering angle the maximum limits are set to `± 0.43632/Lf`, where `Lf` is distance between center of gravity and front axle. The resulting actuator vector is applied only on the very first step and the process is continued after every single step to continuously project/predict the target path. 
 
-Attempted to run Twiddle and arrive at the hyperparameters, but it was causing the code to become quite unstable, definitely implementing Twiddle right way will help arrive the right hyperparameters for PID controller. As of now, this project has manually optimized hyperparameter based on the experience from attempting Twiddle implementation. The drawback with this primitive setup was the speed of simulation was fairly limited.
-
-Having just one PID controller for actuating the steering wheel resulted in a smooth control of the vehicle in the simulator. When a second controller was added to actuate the throttle, the execution in the simulator was wavy the PID was overcontrolling the system. But it was able to accomplish higher speeds.
-
-As far the manual optimization goes, it was very surprising to see the differential component had less impact than the integral component. If the simulator was built with basic physics engine in Unity, it would have responded more for the proportional and differential component and than the integral component. It sounds like the simulator was programmed considering some real world factors to closely simulate on road conditions.
 
 ### Video
  
+[YouTube Link](https://youtu.be/Vpj_hF4iM1E)
 
 ##### Quick Animation
 
+![model-predictive-controller](./images/model-predictive-controller.gif)
 
-### Basic Build Instructions
+
+### Build instructions for mac os x
 
 1. Clone this repo.
+2. Run `brew install mumps`
+3. Run `brew install ipopt` 
 2. Make a build directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
-4. Run it: `./pid`. 
+4. Run it: `./mpc`. 
