@@ -50,7 +50,7 @@ To ensure smooth transition of actuators values the gap between the actuator val
 
 ### Video
  
-[YouTube Link](https://youtu.be/Vpj_hF4iM1E)
+[YouTube Link](https://youtu.be/NcV38tI-EmM)
 
 ##### Quick Animation
 
